@@ -1,15 +1,19 @@
 import requests
+api_key = "Enter Your API Key"
 
-api_key = "ENTER YOUR API KEY"
-
+#Prompt user for location
 user_city = input("Please enter city: ")
 user_state = input("Please enter state: ")
 user_country_code = input("Please enter country code: ")
 
+#Get location lat and lon from geo api
 location = requests.get(f"http://api.openweathermap.org/geo/1.0/direct?q={user_city},"
-                        f"{user_state},{user_country_code}&limit={1}&appid={api_key}")
+                        f"{user_state},{user_country_code}&limit={5}&appid={api_key}")
+lat = location.json()[0]['lat']
+lon = location.json()[0]['lon']
 
-
-weather_results = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat={33}&lon={55}&appid={api_key}&units=imperial')
+#Get weather from weather api
+weather_results = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=imperial')
 print(f"Temperature in {user_city} is {weather_results.json()['main']['temp']}")
-print(weather_results.json())
+
+#print(requests.get(f"http://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={api_key}&units=imperial").json())
