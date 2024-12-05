@@ -9,11 +9,25 @@ user_country_code = input("Please enter country code: ")
 #Get location lat and lon from geo api
 location = requests.get(f"http://api.openweathermap.org/geo/1.0/direct?q={user_city},"
                         f"{user_state},{user_country_code}&limit={5}&appid={api_key}")
-lat = location.json()[0]['lat']
-lon = location.json()[0]['lon']
+if location.status_code == 200:
+    lat = location.json()[0]['lat']
+    lon = location.json()[0]['lon']
+else:
+    "Error getting location"
+    lat = 1
+    lon = 1
 
 #Get weather from weather api
 weather_results = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=imperial')
-print(f"Temperature in {user_city} is {weather_results.json()['main']['temp']}")
+if weather_results.status_code == 200:
+    print(f"Temperature in {user_city} is {weather_results.json()['main']['temp']}")
+else:
+    print("Error getting weather data")
 
-#print(requests.get(f"http://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={api_key}&units=imperial").json())
+five_day_forecast = requests.get(f"http://api.openweathermap.org/data/2.5/"
+                                 f"forecast?lat={lat}&lon={lon}&appid={api_key}&units=imperial")
+if five_day_forecast.status_code == 200:
+    for i in five_day_forecast.json()['list']:
+        print(i)
+else:
+    print("Error getting weather data")
