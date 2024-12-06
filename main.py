@@ -1,7 +1,7 @@
 import requests
 import datetime
 
-api_key = "Put your API key here"
+api_key = "your_api_key"
 
 #Prompt user for location
 user_city = input("Please enter city: ")
