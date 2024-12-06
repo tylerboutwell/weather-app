@@ -1,4 +1,7 @@
 import requests
+import datetime
+import pytz
+
 api_key = "Put your API key here"
 
 #Prompt user for location
@@ -31,6 +34,9 @@ if five_day_forecast.status_code == 200:
     print("---Five day forecast---")
     for i in five_day_forecast.json()['list']:
         count += 1
-        print(f"{i['dt_txt']}: {i['main']['temp']}")
+        date_info = i['dt_txt']
+        date_parsed = datetime.datetime.strptime(date_info, '%Y-%m-%d %H:%M:%S')
+        date_formatted = datetime.datetime.strftime(date_parsed, '%m-%d-%y %H:%M:%S')
+        print(f"{date_formatted}: {five_day_forecast.json()['city']['timezone']} {i['main']['temp']}")
 else:
     print("Error getting weather data")
